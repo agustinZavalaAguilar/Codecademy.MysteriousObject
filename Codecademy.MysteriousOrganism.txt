@@ -1,0 +1,120 @@
+// Returns a random DNA base
+const returnRandBase = () => {
+  const dnaBases = ['A', 'T', 'C', 'G']
+  return dnaBases[Math.floor(Math.random() * 4)] 
+}
+
+// Returns a random single stand of DNA containing 15 bases
+const mockUpStrand = () => {
+  const newStrand = []
+  for (let i = 0; i < 15; i++) {
+    newStrand.push(returnRandBase())
+  }
+  return newStrand
+}
+let pAequorFactory = (number, dna) => {
+  return {
+    specimenNum:number,
+    dna: dna,
+    mutate() {
+      let randIndex = 
+      Math.floor(Math.random() * 15); 
+      let randBase = returnRandBase();      
+      let replaceBase = this.dna[randIndex];     
+      let basesArray = ['A', 'T', 'C', 'G'];
+      let filteredBasesArray = basesArray.filter(base=> base !== replaceBase);      
+      this.dna.splice(randIndex, 1, filteredBasesArray[Math.floor(Math.random() * 3)]);
+console.log (this.dna);     
+    },
+    compareDNA(compareEAequor) {
+      let specimen1 = this.dna
+      let specimen2 = compareEAequor
+      let commonDnaCounter = 0;
+      for (let i= 0; i < this.dna.length; i++){
+        if (this.dna[i] === compareEAequor[i]){
+          commonDnaCounter++
+        }
+      }
+      let commonPercentage = (100/15) * commonDnaCounter;
+      //console.log(this.dna);
+      //console.log(specimen2);
+      //console.log(commonDnaCounter);
+      //console.log(`specimen #1 and specimen #2 have ${commonPercentage} % DNA in common`);
+      return commonPercentage;
+    },
+    willLikelySurvive() {
+      let baseCounter = 0;
+      for (let base of this.dna){
+        if (base === 'C' || base === 'G'){
+          baseCounter++;
+        }        
+      }    
+        if(baseCounter >= 9) return true;
+        else return false;
+    },
+    complementStrand() {
+      let complementaryStrand = [];
+      for (let base of this.dna){
+        switch (base){
+          case 'A':
+          complementaryStrand.push('T');
+          break;
+          case 'T':
+          complementaryStrand.push('A');
+          break;
+          case 'C':
+          complementaryStrand.push('G');
+          break;
+          case 'G':
+          complementaryStrand.push('C');
+          break;
+        }
+      }
+       return complementaryStrand;
+    }   
+  }
+}
+
+let survivorPAequorArray = [];
+
+let survivorCounter = 0;
+while (survivorCounter < 30){
+  let survivorArrayGenerator = 
+  pAequorFactory(1, mockUpStrand());
+  if (survivorArrayGenerator.willLikelySurvive() === true) {
+    survivorPAequorArray.push(survivorArrayGenerator.dna);
+    survivorCounter++;
+  }
+}
+//My function to find the most related pair from the 30 strands array
+const mostRelatedPair = (arr)=>{
+//First I create a tablelike array to store pairs of strands and percentages
+  let tableCreator = arr =>{
+    let table = [];
+
+    for (let i = 0; i < arr.length; i++ ){
+      for (let j = i + 1; j < arr.length; j++){
+        let percentage = pAequorFactory(1, arr[i]);
+        table.push([percentage.compareDNA(arr[j]),arr[i],arr[j]]);
+      }
+    }
+    return table;
+  }
+  let tableOne = tableCreator(arr);
+//Then sort the values by percentage
+  const compare = ( a, b )=> {
+    if ( a[0] < b[0] ){
+     return 1;
+    }
+    if ( a[0] > b[0] ){
+      return -1;
+    }
+    return 0;
+  }
+  tableOne.sort( compare );
+  console.log('Most related survivor strands:');
+  console.log( tableOne[0]);
+}
+
+mostRelatedPair(survivorPAequorArray);
+
