@@ -1,0 +1,26 @@
+h1, h2, h3{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    text-align: center;
+    color:maroon;
+}
+
+html{
+    background-color:wheat;
+    }
+
+    table{
+        background-color:darkslategrey;        
+        border-spacing: 5px;       
+        margin: 0 auto;                    
+    }
+
+    thead{
+        background-color:khaki;
+    }
+
+    td{
+        background-color: wheat;
+        padding: 10px;
+    }
+
+   
